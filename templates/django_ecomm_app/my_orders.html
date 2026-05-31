@@ -1,0 +1,36 @@
+{% extends 'django_ecomm_app/base.html' %} {% block title %} Orders
+Page-Cartovate {% endblock %} {% block content %}
+<h3>My Orders</h3>
+
+{% for order in orders %}
+<div class="card mb-3 shadow-sm">
+  <div class="card-header d-flex justify-content-between">
+    <span
+      ><strong>Order #{{ order.id }}</strong> - {{ order.ord_created_at|date:'d M Y' }}</span
+    >
+    <span
+      class="badge {% if order.ord_status == 'delivered' %} bg-success {% elif order.ord_status == 'shipped' %} bg-info {% elif order.ord_status == 'confirmed' %} bg-primary {% else %} bg-warning text-dark{% endif %}"
+    >
+      {{ order.ord_status|capfirst }}
+    </span>
+  </div>
+
+  <div class="card-body">
+    {% for item in order.items.all %}
+    <p class="mb-1">
+      {{ item.product.pr_name }} x {{ item.quantity }} - ${{ item.price }}
+    </p>
+    {% endfor %}
+    <hr />
+
+    <strong>Total: ${{ order.ord_total_price }}</strong>
+    <br /><small class="text-muted"
+      ><strong>Delivery Address:</strong> {{ order.ord_shipping_address }}</small
+    >
+  </div>
+</div>
+{% empty %}
+<p class="text-muted text-center py-4">
+  No orders placed yet...!! <a href="/">Shop Now!!</a>
+</p>
+{% endfor %} {% endblock %}

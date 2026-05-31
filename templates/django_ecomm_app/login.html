@@ -1,0 +1,40 @@
+{% extends 'django_ecomm_app/base.html' %} {% block title %}Login
+Page-Cartovate{% endblock %} {% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-4">
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary text-white"><h5>Login</h5></div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label>Username:</label>
+            <input type="text" name="username" class="form-control" required />
+          </div>
+          <div class="mb-3">
+            <label>Password:</label>
+            <input
+              type="password"
+              name="password"
+              class="form-control"
+              required
+            />
+          </div>
+          <button class="btn btn-warning w-100 fw-bold">Login</button>
+        </form>
+        <div class="mt-3 text-center">
+          <a href="{% url 'password_reset' %}" class="text-muted"
+            ><button class="btn btn-secondary">Forgot your password?</button></a
+          >
+        </div>
+        <p class="mt-2 text-center">
+          New User?
+          <a href="{% url 'register' %}"
+            ><button class="btn btn-primary">Sign Up Here</button></a
+          >
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

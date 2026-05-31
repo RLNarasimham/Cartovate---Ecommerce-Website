@@ -1,0 +1,59 @@
+{% extends 'django_ecomm_app/base.html' %} {% block title %} Product Details
+Page-Cartovate {% endblock %} {% block content %}
+<div class="row">
+  <div class="col-md-4 text-center">
+    {% if product.pr_image %}
+    <img
+      src="{{ product.pr_image.url }}"
+      class="img-fluid rounded"
+      style="max-height: 350px"
+      alt="Product Detail Image"
+    />
+    {% else %}
+    <div
+      class="bg-light rounded d-flex align-items-center justify-content-center"
+      style="height: 350px; font-size: 2rem"
+    >
+      No Image inserted
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="col-md-8">
+    <h2>{{ product.pr_name }}</h2>
+    <p class="text-muted">Category: {{ product.pr_category }}</p>
+    <div class="mb-3">
+      <span class="fs-3 fw-bold text-success">${{ product.pr_price }}</span>
+      {% if product.pr_old_price %}
+      <span class="text-muted text-decoration-line-through ms-2"
+        >${{ product.pr_old_price }}</span
+      >
+      <span class="badge bg-success ms-2"
+        >{{ product.discount_percent }}% off</span
+      >
+      {% endif %}
+    </div>
+
+    <p>
+      <span class="text-primary">{{ product.pr_rating }}</span> {% for i in '12345' %} {% if forloop.counter <= product.pr_rating %}
+      ⭐ {% else %} ☆ {% endif %} {% endfor %}
+    </p>
+    <p>{{ product.pr_description }}</p>
+    {% if product.pr_stock > 0 %}
+    <p class="text-success">In Stock ✅ ({{ product.pr_stock }} available)</p>
+    <a
+      href="{% url 'add to cart' product.pk %}"
+      class="btn btn-warning btn-lg px-5"
+      >Add to 🛒</a
+    >
+    <a
+      href="{% url 'toggle_wishlist' product.pk %}"
+      class="btn {% if in_wishlist %} btn-info {% else %} btn-outline-info {% endif %} btn-lg px-4 ms-2"
+      >❤️ Wishlist</a
+    >
+    {% else %}
+    <p class="text-danger fw-bold">Sorry.. Out of Stock</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
