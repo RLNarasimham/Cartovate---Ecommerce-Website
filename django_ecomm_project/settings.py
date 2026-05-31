@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-e+t+z2^8_n0vb!59gd*x9!8sii8k6gr3@c(#j14&4u^b=9l@sj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['rlncartovateecommwebsite.pythonanywhere.com']
 
 
 # Application definition
@@ -141,4 +141,4 @@ DEFAULT_FROM_EMAIL=os.getenv('DEFAULT_FROM_EMAIL',EMAIL_HOST_USER)
 #Password reset timeout in seconds
 PASSWORD_RESET_TIMEOUT=120
 
-ALLOWED_HOSTS=os.getenv('ALLOWED_HOSTS','localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS=os.getenv('ALLOWED_HOSTS','rlncartovateecommwebsite.pythonanywhere.com,localhost,127.0.0.1').split(',')
