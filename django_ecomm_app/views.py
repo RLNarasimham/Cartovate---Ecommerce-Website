@@ -5,9 +5,9 @@ from django_ecomm_app.forms import CheckoutForm, RegisterForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.db.models import F
-from django.db import transaction
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.db.models import F
 
 # Create your views here.
 # ── HOME PAGE ─────────────────────────────────────────────────────────
@@ -21,7 +21,7 @@ def show_home_view(request):
         products=products.filter(
             Q(pr_name__icontains=query) | Q(pr_description__icontains=query)
         )
-    
+
     if category:
         products=products.filter(pr_category__cat_name=category)
 
@@ -124,21 +124,19 @@ def update_cart_qty_view(request,pk):
 @login_required
 def place_order_view(request):
     cart = get_object_or_404(Cart, user=request.user)
-    
+
     if not cart.cartitem_set.exists():
         messages.error(request, 'Your cart is empty')
         return redirect('cart')
-        
-    # 1. MOVED UP: Pre-check stock for BOTH GET and POST requests
-    # If they click "Proceed to Checkout" with 100 items, this instantly kicks them back.
+
     for item in cart.cartitem_set.all():
         if item.cart_product.pr_stock < item.cart_quantity:
             messages.error(
-                request, 
+                request,
                 f"Sorry, we only have {item.cart_product.pr_stock} of '{item.cart_product.pr_name}' left in stock. Please update your quantity."
             )
             return redirect('cart')
-    
+
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
@@ -149,14 +147,11 @@ def place_order_view(request):
                         ord_total_price=cart.total(),
                         ord_shipping_address=form.cleaned_data['shipping_address']
                     )
-                    
+
                     for item in cart.cartitem_set.all():
-                        # Double-check inside the transaction just in case someone else 
-                        # bought the last item while this user was typing their address
                         item.cart_product.refresh_from_db()
-                        
+
                         if item.cart_product.pr_stock < item.cart_quantity:
-                            # If stock ran out while they were typing, trigger an error
                             raise ValueError(f"Sorry, '{item.cart_product.pr_name}' just went out of stock!")
 
                         OrderItem.objects.create(
@@ -165,27 +160,26 @@ def place_order_view(request):
                             quantity=item.cart_quantity,
                             price=item.cart_product.pr_price
                         )
-                        
+
                         item.cart_product.pr_stock = F('pr_stock') - item.cart_quantity
                         item.cart_product.save()
-                        
+
                     cart.cartitem_set.all().delete()
-                
+
                 messages.success(request, f'Order #{order.id} placed successfully!')
                 return redirect('my_orders')
-                
+
             except ValueError as e:
-                # Catches the specific stock error if it changed during checkout
                 messages.error(request, str(e))
                 return redirect('cart')
-                
-            except Exception as e:
+
+            except Exception:
                 messages.error(request, "An error occurred while processing your order. Please try again.")
                 return redirect('cart')
-                
+
     else:
         form = CheckoutForm()
-        
+
     return render(request, 'django_ecomm_app/place_order.html', {'cart': cart, 'form': form})
 
 @login_required
