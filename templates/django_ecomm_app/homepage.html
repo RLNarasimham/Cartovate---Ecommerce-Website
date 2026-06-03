@@ -1,7 +1,6 @@
 {% extends 'django_ecomm_app/base.html' %} {% block title %} Homepage -
 Cartovate {% endblock %} {% block content %}
 
-<!-- Category Filter Buttons -->
 <div class="mb-3 d-flex flex-wrap gap-2">
   {% if query %}
   <a href="{% url 'home' %}?q={{ query|urlencode }}" class="btn {% if not selected_category %} btn-primary {% else %} btn-outline-primary {% endif %} btn-sm">All</a>
@@ -13,7 +12,6 @@ Cartovate {% endblock %} {% block content %}
   {% endfor %}
 </div>
 
-<!-- Product Grid -->
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
   {% for product in page_obj %}
   <div class="col">

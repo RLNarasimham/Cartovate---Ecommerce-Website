@@ -4,15 +4,12 @@
 
 {% if cart.cartitem_set.all %}
 <div class="row g-4">
-  <!-- Added g-4 for consistent spacing between columns on mobile -->
   <div class="col-md-8">
     {% for item in cart.cartitem_set.all %}
     <div class="card mb-3 shadow-sm">
-      <!-- Adjusted layout container: flex-column on mobile, row on tablet/desktop -->
       <div
         class="card-body d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-3"
       >
-        <!-- Product Image and Details grouping for better responsive behavior -->
         <div class="d-flex align-items-center gap-3 w-100 flex-grow-1">
           {% if item.cart_product.pr_image %}
           <img
@@ -29,7 +26,6 @@
           </div>
         </div>
 
-        <!-- Price and action layout row for tight spaces -->
         <div
           class="d-flex align-items-center justify-content-between justify-content-sm-end gap-3 w-100 w-sm-auto flex-wrap mt-2 mt-sm-0"
         >
@@ -71,7 +67,7 @@
   </div>
 
   <div class="col-md-4">
-    <!-- Added a missing standard Bootstrap 'card' layout utility wrapper here to normalize theme border backgrounds -->
+    
     <div class="card shadow-sm">
       <div class="card-body">
         <h5>Price Summary</h5>
