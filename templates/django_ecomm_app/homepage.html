@@ -1,7 +1,7 @@
 {% extends 'django_ecomm_app/base.html' %} {% block title %} Homepage -
 Cartovate {% endblock %} {% block content %}
 
-<div class="mb-3 d-flex flex-wrap gap-2">
+<div class="mb-3 d-flex flex-wrap gap-4">
   {% if query %}
   <a href="{% url 'home' %}?q={{ query|urlencode }}" class="btn {% if not selected_category %} btn-primary {% else %} btn-outline-primary {% endif %} btn-sm">All</a>
   {% else %}
